@@ -1,19 +1,28 @@
-/* The population class includes methods to control the behaviour of all agents
-currently on the map */
-
+/**
+  * @author Aaron
+  */
 class Population {
   int count;                                                        // Number of agents in the population
   ArrayList<Agent> pop;                                             // ArrayList with all the agents in it
   int[][] agentMap = new int[langMap.mapWidth][langMap.mapWidth];   // Map with all agents
 
-  //Create a grid with all the positions of agents so it can be considered in the move-method
-  Population() {
+
+  /** Population class constructor
+    * <p>
+    * The population class includes methods to control the behaviour of all agents
+    * currently on the map. It creates a binary grid with all the positions of agents
+    * so it can be considered in the move-method.
+    */
+  public Population() {
     count = 15;
     pop = new ArrayList<Agent>();
   }
 
-  // Reset the agentMap to contain only 0s
-  void resetAgentMap() {
+  /** Resets the agentMap
+    * <p>
+    * After resetting the whole map is filled with 0's
+    */
+  public void resetAgentMap() {
     for(int i = 0; i < langMap.mapWidth; i++) {
       for(int j = 0; j < langMap.mapWidth; j++) {
         agentMap[i][j] = 0;
@@ -21,8 +30,12 @@ class Population {
     }
   }
 
-  // Initialize the agents randomly on the islands and update their movement
-  void update() {
+  /** Initialize and move the agents
+    * <p>
+    * The agents are initialized randomly on the islands and moved
+    * using their move method.
+    */
+  public void update() {
     // If there is no population yet, create one
     if(pop.size() == 0) {
       int i = 0;
@@ -54,8 +67,11 @@ class Population {
     }
   }
 
-  // Show the ID of the living agents
-  void showID() {
+  /** Show the IDs
+    * <p>
+    * This helper method prints the IDs of all the agents on the map.
+    */
+  private void showID() {
     for(int i = 0; i < count; i++) {
       Agent a = pop.get(i);
       print(a.id, "\n");

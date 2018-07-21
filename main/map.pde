@@ -1,6 +1,6 @@
-/* The map class defines the Map of the simulation and includes the methods to
-get coordinates of certain points (gates, islands). It also includes the whole
-coloring and modeling of the world. */
+/**
+  * @author Aaron
+  */
 
 class Map {
   int[][] map = { {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -46,14 +46,28 @@ class Map {
   int mapWidth;                                                                                          // Size of the blueprint
   int gridX, gridY;                                                                                      // Gridsize
 
-  Map () {
+  /**Map class constructor
+    * <p>
+    * The map class defines the Map of the simulation and includes the methods to
+    * get coordinates of certain points (gates, islands). It also includes the whole
+    * coloring and modeling of the world.
+    */
+  public Map() {
     mapWidth = 40;
     gridX = width/mapWidth;
     gridY = height/mapWidth;
   }
 
-  // Returns the area of the island
-  int area(int island) {
+  /** Returns the area of the island
+    * <p>
+    * Adds up all the squares as unit squares
+    * and returns the number of squares, i.e.
+    * the area of the island.
+    * <p>
+    * @param island The number of the island
+    * @return Area of the island
+    */
+  public int area(int island) {
     int area = 0;
     // Add up the cells with the island number
     for(int i = 0; i < mapWidth; i++) {
@@ -66,8 +80,15 @@ class Map {
     return area;
   }
 
-  // Returns a two-dimensional Array with the coordinates of the specified gates
-  int[][] gates(String gate) {
+  /** Returns the coordinates of the gates
+    * <p>
+    * @param gate A String specifying which gates should be considered
+    *               "AB" : The gate connecting island A to B
+    *               "AC" : The gate connecting island A to C
+    *               "BC" : The gate connecting island B to C
+    * @return A two-dimensional array with the coordinates of the specified gate
+    */
+  public int[][] gates(String gate) {
     int gateNumber = 0;
     if(gate == "AB") {
       gateNumber = 6;
@@ -95,8 +116,12 @@ class Map {
     return indices;
   }
 
-  // Method to display the map as a two dimensional array
-  void display() {
+  /** Method to display the map
+    * <p>
+    * Displays the map as a two dimensional array with the gates, the gate
+    * connections and the watermarks for the islands.
+    */
+  public void display() {
 
     // Color declaration
     color gateColor = color(200);
@@ -189,7 +214,7 @@ class Map {
     // Watermarking of the islands
     PFont Font1 = createFont("Arial Bold", 100);
     textFont(Font1);
-    
+
     // Give the Island one a watermark
     fill(watermarkOne);
     text("A",210,320);

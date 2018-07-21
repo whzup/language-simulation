@@ -24,7 +24,6 @@ public void setup() {
   langMap = new Map();
   population = new Population();
   voc = new Vocabulary('l');
-  trying = new Word("aeiou", 'l');
   for(int i = 0; i < voc.count; i++) {
     Word w = voc.vocabulary.get(i);
     print(w.letters,"\n");
@@ -37,36 +36,40 @@ public void draw() {
   background(250);
   langMap.display();
   population.update();
-  print(trying.letters, "\n");
-  trying.mutateVowel();
 }
 
-/* TODO 1) FIX EXCHANGEWORDS METHOD AND ALL THE MUTATION METHODS
+/* TODO - Make the agent search more efficient. Maybe just check the neighbor
+          cells for every agent instead of checking the whole map for every agent
 
-        2) solve all the word mutations with StringLists instead of
+        - Make the doubleConsonant method more efficient. It always checks every
+          letter even if it doesn't act.
+
+        - Make the map displaying more efficient.
+
+        - solve all the word mutations with StringLists instead of
            character arrays
 
-        3) doubleConsonant is very complex. Maybe think of an easier way
+        - doubleConsonant is very complex. Maybe think of an easier way
            to implement it
 
-        4) you cannot jump from j to o -> from a to \u00e4 or to o
+        - you cannot jump from j to o -> from a to \u00e4 or to o
 
-        5) change the vowels of diphtongs
+        - change the vowels of diphtongs
 
-        6) method which checks if the word has changed so it can be
+        - method which checks if the word has changed so it can be
            inserted in the etym array (hard) -> maybe create class-wide
             variables with random words so they can be checked inside the
              class
 
-        7) create a method to mutate the begin or the end of a word if
+        - create a method to mutate the begin or the end of a word if
            it is often used with another word with a vowel on the beginning
             or the end
              -> maybe use another class to create sentences
 
-        8) maybe give certain letters a higher probability to be picked
+        - maybe give certain letters a higher probability to be picked
            in the different languages
 
-        9) maybe include mountain regions which have a slower walking rate?
+        - maybe include mountain regions which have a slower walking rate?
 */
 
 /*
@@ -86,8 +89,9 @@ TODO talking:
 (4) give the words the possibility to mutate (vowels, consonants)   done
 (5) if the word mutates -> put it in the etym of itself
 */
-/* The agent class includes the methods to move, teleport
-   and exchange vocabulary with other agents */
+/**
+  * @author Aaron
+  */
 
 class Agent {
   PVector location;       // Current position of the agent
@@ -101,8 +105,16 @@ class Agent {
   Vocabulary vocab;       // Vocabulary
 
   // TODO create a vocabulary and insert it into every agent
-
-  Agent(int xcoord, int ycoord, Vocabulary lingua) {
+  /** Agent class constructor
+    * <p>
+    * The agent class includes the methods to move, teleport
+    * and exchange vocabulary with other agents.
+    * <p>
+    * @param xcoord The x-coordinate of the agent's spawn
+    * @param ycoord The y-coordinate of the agent's spawn
+    * @param lingua The vocabulary of the lingua franca
+    */
+  public Agent(int xcoord, int ycoord, Vocabulary lingua) {
 
     vocab = lingua;
 
@@ -111,6 +123,7 @@ class Agent {
     // Get the coordinates of the spawn
     spawnX = xcoord;
     spawnY = ycoord;
+
     // Decide on which island the agent currently is
     if(langMap.map[PApplet.parseInt(location.y)][PApplet.parseInt(location.x)] == 1) {
       island = 1;
@@ -133,10 +146,14 @@ class Agent {
       spawnIsland = 3;
     }
 
+    // Give the agent a random ID
     id = PApplet.parseInt(random(PApplet.parseFloat(MAX_INT)));
   }
 
-  // Displays the agent
+  /** Displays the agent
+    * <p>
+    * The agent is displayed as a circle with a darker shade of the island colour
+    */
   public void display() {
     if(spawnIsland == 1) {
       fill(0xff7f3939);
@@ -151,8 +168,13 @@ class Agent {
     ellipse((location.x+0.5f)*langMap.gridX, (location.y+0.5f)*langMap.gridY, langMap.gridX-7, langMap.gridY-7);
   }
 
-  // returns the ID of the nearest Agent
-  // -> maybe needed for the exchange of words later
+  /** Returns the ID of the nearest Agent
+    * <p>
+    * Searches the whole population for the nearest neighbour
+    * and returns its ID
+    * <p>
+    * @return the ID of the nearest neighbour
+    */
   public int nearestAgent() {
     float min = langMap.mapWidth;
     for(Agent b : population.pop) {
@@ -165,8 +187,36 @@ class Agent {
     }
     return id;
   }
+/*
+  // returns the ID of an agent which is 1 cell away -> used for talking
+  public int neighborAgent() {
+    // Get the coordinates of the neighbour cells
+    int[] upArr = {int(location.x), int(location.y - 1)};
+    int[] upRightArr = {int(location.x + 1), int(location.y - 1)};
+    int[] upLeftArr = {int(location.x - 1), int(location.y - 1)};
+    int[] downArr = {int(location.x), int(location.y + 1)};
+    int[] downRightArr = {int(location.x + 1), int(location.y + 1)};
+    int[] downLeftArr = {int(location.x - 1), int(location.y + 1)};
+    int[] rightArr = {int(location.x + 1), int(location.y)};
+    int[] leftArr = {int(location.x - 1), int(location.y)};
 
-  // Moves the agent in a random direction
+    // Get the values of the neighbour cells
+    int up = population.agentMap.map[upArr[1]][upArr[0]];
+    int upRight = population.agentMap.map[upRightArr[1]][upRightArr[0]];
+    int upLeft = population.agentMap.map[upLeftArr[1]][upLeftArr[0]];
+    int down = population.agentMap.map[downArr[1]][downArr[0]];
+    int downRight = population.agentMap.map[downRightArr[1]][downRightArr[0]];
+    int downLeft = population.agentMap.map[downLeftArr[1]][downLeftArr[0]];
+    int right = population.agentMap.map[rightArr[1]][rightArr[0]];
+    int left = population.agentMap.map[leftArr[1]][leftArr[0]];
+
+    ArrayList<int[]> reachableAgents = new ArrayList<int[]>();
+
+    if()
+  }*/
+
+  /** Moves the agent in a random direction
+    */
   public void move() {
 
     // Get the coordinates of the neighbour cells
@@ -193,7 +243,7 @@ class Agent {
     // Check if the neighbour cells are still on an island,
     // if so move them to moveableCells
     if(up > 0 && upAgent != 1) {
-      movableCells.add(upArr); //<>// //<>//
+      movableCells.add(upArr);
     }
     if(down > 0 && downAgent != 1) {
       movableCells.add(downArr);
@@ -205,7 +255,7 @@ class Agent {
       movableCells.add(leftArr);
     }
 
-    // Choose a random direction
+    // Choose a random direction from movableCells
     int direction = PApplet.parseInt(random(movableCells.size()));
     if(movableCells.size() > 0) {
       location.x = movableCells.get(direction)[0];
@@ -214,41 +264,48 @@ class Agent {
 
   }
 
-  // Teleports the agent if he walks on a gate
-  // gets the coordinates from the gatesXY methods (class Map)
+  /** Teleports the agent
+    * <p>
+    * The agent is teleported if he walks on a gate.
+    * This method gets the coordinates of the gatesXY
+    * from the gatesXY methods (class Map)
+    */
   public void gateTeleport() {
-    // Teleport from A to B or from B to A
+    // Teleport from A to B
     if(location.x == langMap.gates("AB")[0][0] && location.y == langMap.gates("AB")[0][1]) {
       location.x = langMap.gates("AB")[1][0];
       location.y = langMap.gates("AB")[1][1];
     }
+    // or from B to A
     else if(location.x == langMap.gates("AB")[1][0] && location.y == langMap.gates("AB")[1][1]) {
       location.x = langMap.gates("AB")[0][0];
       location.y = langMap.gates("AB")[0][1];
     }
 
-    // Teleport from A to C or from C to A
+    // Teleport from A to C
     else if(location.x == langMap.gates("AC")[0][0] && location.y == langMap.gates("AC")[0][1]) {
       location.x = langMap.gates("AC")[1][0];
       location.y = langMap.gates("AC")[1][1];
     }
+    // or from C to A
     else if(location.x == langMap.gates("AC")[1][0] && location.y == langMap.gates("AC")[1][1]) {
       location.x = langMap.gates("AC")[0][0];
       location.y = langMap.gates("AC")[0][1];
     }
 
-    // Teleport from B to C or from C to B
+    // Teleport from B to C
     else if(location.x == langMap.gates("BC")[0][0] && location.y == langMap.gates("BC")[0][1]) {
       location.x = langMap.gates("BC")[1][0];
       location.y = langMap.gates("BC")[1][1];
     }
+    // or from C to B
     else if(location.x == langMap.gates("BC")[1][0] && location.y == langMap.gates("BC")[1][1]) {
       location.x = langMap.gates("BC")[0][0];
       location.y = langMap.gates("BC")[0][1];
     }
   }
-
-  // Exchange words with the nearest Agent
+/*
+  // Exchange words with the nearest Agent -> huge performance loss
   public void exchangeWords() {
     Word exchangeWord1 = new Word("", voc.vocCls);
     Word exchangeWord2 = new Word("", voc.vocCls);
@@ -260,9 +317,9 @@ class Agent {
           dist = sqrt((comm.location.x - location.x) * (comm.location.x - location.x)
                       + (comm.location.y - location.y) * (comm.location.y - location.y));
           // Only exchange words if the agent is near enough
-          if(dist <= 1.5f) {
+          if(dist <= 1.5) {
             // Random index
-            int changeIndex = PApplet.parseInt(random(vocab.count-1));
+            int changeIndex = int(random(vocab.count-1));
             // Take a word from the nearest agent
             exchangeWord1 = comm.vocab.vocabulary.get(changeIndex);
             comm.vocab.vocabulary.remove(changeIndex);
@@ -289,11 +346,11 @@ class Agent {
       }
     }
     //print("\"" + exchangeWord1.letters + "\" was exchanged for \"" + exchangeWord2.letters + "\"\n");
-  }
+  }*/
 }
-/* The map class defines the Map of the simulation and includes the methods to
-get coordinates of certain points (gates, islands). It also includes the whole
-coloring and modeling of the world. */
+/**
+  * @author Aaron
+  */
 
 class Map {
   int[][] map = { {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -339,15 +396,30 @@ class Map {
   int mapWidth;                                                                                          // Size of the blueprint
   int gridX, gridY;                                                                                      // Gridsize
 
-  Map () {
+  /**Map class constructor
+    * <p>
+    * The map class defines the Map of the simulation and includes the methods to
+    * get coordinates of certain points (gates, islands). It also includes the whole
+    * coloring and modeling of the world.
+    */
+  public Map() {
     mapWidth = 40;
     gridX = width/mapWidth;
     gridY = height/mapWidth;
   }
 
-  // Returns the area of the island
+  /** Returns the area of the island
+    * <p>
+    * Adds up all the squares as unit squares
+    * and returns the number of squares, i.e.
+    * the area of the island.
+    * <p>
+    * @param island The number of the island
+    * @return Area of the island
+    */
   public int area(int island) {
     int area = 0;
+    // Add up the cells with the island number
     for(int i = 0; i < mapWidth; i++) {
       for(int j = 0; j < mapWidth; j++) {
         if(map[i][j] == island) {
@@ -358,7 +430,14 @@ class Map {
     return area;
   }
 
-  // Returns a two-dimensional Array with the coordinates of the gate AB
+  /** Returns the coordinates of the gates
+    * <p>
+    * @param gate A String specifying which gates should be considered
+    *               "AB" : The gate connecting island A to B
+    *               "AC" : The gate connecting island A to C
+    *               "BC" : The gate connecting island B to C
+    * @return A two-dimensional array with the coordinates of the specified gate
+    */
   public int[][] gates(String gate) {
     int gateNumber = 0;
     if(gate == "AB") {
@@ -387,7 +466,11 @@ class Map {
     return indices;
   }
 
-  // Method to display the map as a two dimensional array
+  /** Method to display the map
+    * <p>
+    * Displays the map as a two dimensional array with the gates, the gate
+    * connections and the watermarks for the islands.
+    */
   public void display() {
 
     // Color declaration
@@ -481,6 +564,7 @@ class Map {
     // Watermarking of the islands
     PFont Font1 = createFont("Arial Bold", 100);
     textFont(Font1);
+
     // Give the Island one a watermark
     fill(watermarkOne);
     text("A",210,320);
@@ -494,21 +578,30 @@ class Map {
     text("C",420,800);
   }
 }
-/* The population class includes methods to control the behaviour of all agents
-currently on the map */
-
+/**
+  * @author Aaron
+  */
 class Population {
   int count;                                                        // Number of agents in the population
   ArrayList<Agent> pop;                                             // ArrayList with all the agents in it
   int[][] agentMap = new int[langMap.mapWidth][langMap.mapWidth];   // Map with all agents
 
-  //Create a grid with all the positions of agents so it can be considered in the move-method
-  Population() {
-    count = 20;
+
+  /** Population class constructor
+    * <p>
+    * The population class includes methods to control the behaviour of all agents
+    * currently on the map. It creates a binary grid with all the positions of agents
+    * so it can be considered in the move-method.
+    */
+  public Population() {
+    count = 15;
     pop = new ArrayList<Agent>();
   }
 
-  // Reset the agentMap to contain only 0s
+  /** Resets the agentMap
+    * <p>
+    * After resetting the whole map is filled with 0's
+    */
   public void resetAgentMap() {
     for(int i = 0; i < langMap.mapWidth; i++) {
       for(int j = 0; j < langMap.mapWidth; j++) {
@@ -517,7 +610,11 @@ class Population {
     }
   }
 
-  // Initialize the agents randomly on the islands and update their movement
+  /** Initialize and move the agents
+    * <p>
+    * The agents are initialized randomly on the islands and moved
+    * using their move method.
+    */
   public void update() {
     // If there is no population yet, create one
     if(pop.size() == 0) {
@@ -542,7 +639,7 @@ class Population {
         for(Agent b: pop) {
           agentMap[PApplet.parseInt(b.location.y)][PApplet.parseInt(b.location.x)] = 1;
         }
-        a.exchangeWords();
+        //a.exchangeWords();
         a.gateTeleport();
         a.move();
         a.display();
@@ -550,16 +647,20 @@ class Population {
     }
   }
 
-  // Show the ID of the living agents
-  public void showID() {
+  /** Show the IDs
+    * <p>
+    * This helper method prints the IDs of all the agents on the map.
+    */
+  private void showID() {
     for(int i = 0; i < count; i++) {
       Agent a = pop.get(i);
       print(a.id, "\n");
     }
   }
 }
-/* The vocabulary class includes the methods to create a vocabulary
-   with a given length and with the appropriate distributions */
+/**
+  * @author Aaron
+  */
 
 class Vocabulary {
   int count;
@@ -576,18 +677,33 @@ class Vocabulary {
     "m", "n", "l", "r", "s", "z", "f", "v", "w", "x"
   );
 
-    // Classification of the vocabulary (Lingua or island)
+  // Classification of the vocabulary (Lingua or island)
   char vocCls;
 
-  Vocabulary(char classification) {
+  /** Vocabulary class constructor
+    * <p>
+    * The vocabulary class includes the methods to create a vocabulary
+    * with a given length and with the appropriate distributions.
+    * <p>
+    * @param classification The classification of the vocabulary
+    *                       "i" : island vocabulary
+    *                       "l" : lingua franca vocabulary
+    */
+  public Vocabulary(char classification) {
     count = 2;
     vocCls = classification;
     createVocabulary();
   }
 
-  // Method to calculate poisson distributed
-  // numbers with lambda = 4.8
-  public int poissonDist() {
+  /** Helper method to calculate poisson distributed random numbers
+    * <p>
+    * Calculates a poisson distributed random number with lambda = 4.8.
+    * This method is used to calculate the word length.
+    * The algorithm was adapted from Donald E. Knuth's work.
+    * <p>
+    * @return A poisson distributed random number with a lambda of 4.8
+    */
+  private int poissonDist() {
     double lambda = 4.8f;
     double p = 1.0f;
     double l = Math.exp(-lambda);
@@ -602,8 +718,12 @@ class Vocabulary {
     return k-1;
   }
 
-  // Method to calculate the Zipf distributed probability
-  public float zipfDist(int rank) {
+  /** Calculate a Zipf distributed probability
+    * <p>
+    * @param rank Rank on a scale of word usage
+    * @return The probability that this word occurs
+    */
+  private float zipfDist(int rank) {
     float sum = 0;
     for(int i = 0; i < count; i++) {
       sum += 1/PApplet.parseFloat(i);
@@ -611,7 +731,14 @@ class Vocabulary {
     return (1/PApplet.parseFloat(rank)) / sum;
   }
 
-  // Creates a new syllable with either 2 or 3 letters
+  /** Returns a new syllable with either 2 or 3 letters
+    * <p>
+    * The syllables are randomly generate with different letter orders.
+    * The letter orders are permutations of vocal and consonant combinations.
+    * <p>
+    * @param sylLength Length of the syllable
+    * @return A syllable of the specified length
+    */
   public String createSyllable(int sylLength) {
     String syll = new String();
 
@@ -677,17 +804,25 @@ class Vocabulary {
     return syll;
   }
 
-  // Create a new word with random syllables
+  /** Returns a new word
+    * <p>
+    * The word is created by adding randomly generated syllables
+    * <p>
+    * @param wordLength Length of the word
+    * @return A word generated with random syllables
+    */
   public String createWord(int wordLength) {
     int sylNumber = wordLength / 2;
     String newSyllable = new String();
     String newWord = new String();
+    // If the word length is even then only create syllables of length 2
     if(wordLength % 2 == 0) {
       for(int i = 0; i < sylNumber; i++) {
         newSyllable = createSyllable(2);
         newWord += newSyllable;
       }
     }
+    // If the word length is odd then create syllables of length 2 and one with length 3
     else {
       newSyllable += createSyllable(3);
       newWord += newSyllable;
@@ -699,7 +834,10 @@ class Vocabulary {
     return newWord;
   }
 
-  // Create a new vocabulary
+  /** Create a new vocabulary
+    * <p>
+    * Initializes the Vocabulary class with words.
+    */
   public void createVocabulary() {
     for (int i = 0; i < count; i++) {
       Word newWord = new Word(createWord(poissonDist()), vocCls);
@@ -708,8 +846,9 @@ class Vocabulary {
   }
 
 }
-/* The word class includes all methods to modify words. It also
-contains the tools to retrace the origin of words */
+/**
+  * @author Aaron
+  */
 
 class Word {
   int length;     // Length of the word
@@ -746,103 +885,101 @@ class Word {
   );
 
   StringList shift5 = new StringList(
-    "th", "pf", "kw", "gh"
+    "th", "pf", "w", "h"
   );
 
-  Word(String word, char classification) {
+  /** Word class constructor
+    * <p>
+    * The word class includes all methods to modify words. It also
+    * contains the tools to retrace the origin of words.
+    * <p>
+    * @param word String that represents the word
+    * @param classification The classification of the vocabulary
+    *                       "i" : island vocabulary
+    *                       "l" : lingua franca vocabulary
+    */
+  public Word(String word, char classification) {
     letters = word;
     length = word.length();
     vocClass = classification;
   }
 
-
-/*  void mutateVowel() {
-    int count = 0;
-    char[] letterArray = letters.toCharArray();
-    for(int i = 0; i < length && count < 1; i++) {
-      for(int j = 0; j < voc.vowels.length; j++) {
-        float prob = random(1000);
-        // add 1,0, or -1
-        int dir = int(random(3))-1;
-        if(prob < 3) {
-          if(letterArray[i] == voc.vowels[j] && j != 0 && j != voc.vowels.length-1) {
-            letterArray[i] = voc.vowels[j+dir];
-          }
-          // At the first element of the vowels array the index has to be
-          // adapted
-          else if(letterArray[i] == voc.vowels[j] && j == 0) {
-            if(dir >= 0) {
-              letterArray[i] = voc.vowels[j+1];
-            }
-            else {
-              letterArray[i]  = voc.vowels[voc.vowels.length-1];
-            }
-          }
-          // Start from the first element of the vowels array
-          // if it is at the end
-          else if(letterArray[i] == voc.vowels[j] && j == voc.vowels.length-1) {
-            letterArray[i] = voc.vowels[0];
-          }
-        }
-      }
-    }
-    letters = new String(letterArray);
-  }*/
-
-  // Mutates every vowel in a word with the chance of 0.2% (2/30 from the dir variable
-  // times 3/100 of the if statement)
+  /** Mutate the vowels in the word.
+    * <p>
+    * Mutates every vowel in a word with the chance of 0.2% (2/3 from the dir variable
+    * times 3/100 of the if statement)
+    */
   public void mutateVowel() {
-    int max_random = 10;
+    int max_random = 100;
     for(int i = 0; i < voc.vowels.size(); i++) {
-      float prob = random(max_random);
-      if(letters.contains(voc.vowels.get(i)) && prob < 3) {
-        int dir = PApplet.parseInt(random(3))-1;
-        int newIndex;
-        if(dir < 0 && i == 0) {
-          newIndex = voc.vowels.size()-1;
-        } else {
-          newIndex = (i+dir) % voc.vowels.size();
+      int newIndex;
+      String vowel = voc.vowels.get(i);
+      if(letters.contains(vowel)) {
+        float prob = random(max_random);
+        if(prob < 3) {
+          // The vowels can shift either forwards or backwards in the array
+          int dir = PApplet.parseInt(random(3)) - 1;
+          if(i == voc.vowels.size() - 1 && dir > 0) {
+            newIndex = 0;
+          }
+          else if(i == 0 && dir < 0) {
+            newIndex = voc.vowels.size() - 1;
+          }
+          else{
+            newIndex = i + dir;
+          }
+          String newVowel = voc.vowels.get(newIndex);
+          letters = letters.replaceFirst(vowel, newVowel);
+          break;
         }
-        letters.replace(voc.vowels.get(i), voc.vowels.get(newIndex));
       }
     }
   }
 
-  // Mutates consonants or consonant groups according to the shiftX-lists
-  // in the vocabulary class with a probability of 0.03%
+  /** Mutate the consonants of the word.
+    * <p>
+    * Mutates consonants or consonant groups according to the shiftX-lists in
+    * the this class with a probability of 0.03%
+    */
   public void mutateConsonant() {
-    String newLetters = new String(letters);
-    int max_random = 3;
+    int max_random = 100;
     float prob = random(max_random);
     for(int j = 0; j < 4; j++) {
       if(prob < 3) {
-        // replacements for shift1
-        if(newLetters.contains(shift1.get(j))) {
-          newLetters.replace(shift1.get(j), shift1.get((j+1) % 4));
-        }
-        // replacements for shift2
-        else if(newLetters.contains(shift2.get(j))) {
-          newLetters.replace(shift2.get(j), shift2.get((j+1) % 4));
-        }
-        // replacements for shift3
-        else if(newLetters.contains(shift3.get(j))) {
-          newLetters.replace(shift3.get(j), shift3.get((j+1) % 4));
-        }
-        // replacements for shift4
-        else if(newLetters.contains(shift4.get(j))) {
-          newLetters.replace(shift4.get(j), shift4.get((j+1) % 4));
-        }
-        // replacements for shift5
-        else if(newLetters.contains(shift1.get(j))) {
-          newLetters.replace(shift5.get(j), shift5.get((j+1) % 4));
+        int newIndex = (j+1) % 4;
+        int switchVar = PApplet.parseInt(random(6));
+        // Replace a random consonant in the string
+        switch (switchVar) {
+          case 1: if(letters.contains(shift1.get(j))) {
+                    letters = letters.replace(shift1.get(j), shift1.get(newIndex));
+                  }
+                  break;
+          case 2: if(letters.contains(shift2.get(j))) {
+                    letters = letters.replace(shift2.get(j), shift2.get(newIndex));
+                  }
+                  break;
+          case 3: if(letters.contains(shift3.get(j))) {
+                    letters = letters.replace(shift3.get(j), shift3.get(newIndex));
+                  }
+                  break;
+          case 4: if(letters.contains(shift4.get(j))) {
+                    letters = letters.replace(shift4.get(j), shift4.get(newIndex));
+                  }
+                  break;
+          case 5: if(letters.contains(shift5.get(j))) {
+                    letters = letters.replace(shift5.get(j), shift5.get(newIndex));
+                  }
+                  break;
         }
       }
     }
-    letters = newLetters;
   }
 
-  // Give certain consonants the possibility to mutate to
-  // a double consonant
+  /** Double the consonant in a word.
+    * <p>
+    * Give certain consonants the possibility to mutate to
+    * a double consonant
+    */
   public void doubleConsonant() {
     char[] letterArray = letters.toCharArray();
     char[] newCharArr = new char[length+1];
