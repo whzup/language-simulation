@@ -1,7 +1,7 @@
 ## Language Evolution
 This is a language evolution simulator inspired by https://github.com/fatiherikli/language-evolution-simulation. It has a similar graphical interface and agents that move randomly around. Every agent belongs to one of the three islands indicated by its colour.
 
-![Demo Picture](demo.png)
+![Demo Picture](https://github.com/whzup/language-simulation/blob/master/demo.PNG)
 
 Planned features are:
 
