@@ -24,10 +24,10 @@ void draw() {
 
 /* TODO - Make the agent search more efficient. Maybe just check the neighbor
           cells for every agent instead of checking the whole map for every agent
-          
+
         - Make the doubleConsonant method more efficient. It always checks every
           letter even if it doesn't act.
-           
+
         - Make the map displaying more efficient.
 
         - solve all the word mutations with StringLists instead of

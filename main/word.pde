@@ -1,5 +1,6 @@
-/* The word class includes all methods to modify words. It also
-contains the tools to retrace the origin of words */
+/**
+  * @author Aaron
+  */
 
 class Word {
   int length;     // Length of the word
@@ -39,15 +40,28 @@ class Word {
     "th", "pf", "w", "h"
   );
 
-  Word(String word, char classification) {
+  /** Word class constructor
+    * <p>
+    * The word class includes all methods to modify words. It also
+    * contains the tools to retrace the origin of words.
+    * <p>
+    * @param word String that represents the word
+    * @param classification The classification of the vocabulary
+    *                       "i" : island vocabulary
+    *                       "l" : lingua franca vocabulary
+    */
+  public Word(String word, char classification) {
     letters = word;
     length = word.length();
     vocClass = classification;
   }
 
-  // Mutates every vowel in a word with the chance of 0.2% (2/3 from the dir variable
-  // times 3/100 of the if statement)
-  void mutateVowel() {
+  /** Mutate the vowels in the word.
+    * <p>
+    * Mutates every vowel in a word with the chance of 0.2% (2/3 from the dir variable
+    * times 3/100 of the if statement)
+    */
+  public void mutateVowel() {
     int max_random = 100;
     for(int i = 0; i < voc.vowels.size(); i++) {
       int newIndex;
@@ -74,9 +88,12 @@ class Word {
     }
   }
 
-  // Mutates consonants or consonant groups according to the shiftX-lists
-  // in the vocabulary class with a probability of 0.03%
-  void mutateConsonant() {
+  /** Mutate the consonants of the word.
+    * <p>
+    * Mutates consonants or consonant groups according to the shiftX-lists in
+    * the this class with a probability of 0.03%
+    */
+  public void mutateConsonant() {
     int max_random = 100;
     float prob = random(max_random);
     for(int j = 0; j < 4; j++) {
@@ -110,8 +127,11 @@ class Word {
     }
   }
 
-  // Give certain consonants the possibility to mutate to
-  // a double consonant
+  /** Double the consonant in a word.
+    * <p>
+    * Give certain consonants the possibility to mutate to
+    * a double consonant
+    */
   void doubleConsonant() {
     char[] letterArray = letters.toCharArray();
     char[] newCharArr = new char[length+1];

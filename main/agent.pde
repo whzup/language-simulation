@@ -1,5 +1,6 @@
-/* The agent class includes the methods to move, teleport
-   and exchange vocabulary with other agents */
+/**
+  * @author Aaron
+  */
 
 class Agent {
   PVector location;       // Current position of the agent
@@ -13,8 +14,16 @@ class Agent {
   Vocabulary vocab;       // Vocabulary
 
   // TODO create a vocabulary and insert it into every agent
-
-  Agent(int xcoord, int ycoord, Vocabulary lingua) {
+  /** Agent class constructor
+    * <p>
+    * The agent class includes the methods to move, teleport
+    * and exchange vocabulary with other agents.
+    * <p>
+    * @param xcoord The x-coordinate of the agent's spawn
+    * @param ycoord The y-coordinate of the agent's spawn
+    * @param lingua The vocabulary of the lingua franca
+    */
+  public Agent(int xcoord, int ycoord, Vocabulary lingua) {
 
     vocab = lingua;
 
@@ -50,8 +59,11 @@ class Agent {
     id = int(random(float(MAX_INT)));
   }
 
-  // Displays the agent as a circle with a darker shade of the island colour
-  void display() {
+  /** Displays the agent
+    * <p>
+    * The agent is displayed as a circle with a darker shade of the island colour
+    */
+  public void display() {
     if(spawnIsland == 1) {
       fill(#7f3939);
     }
@@ -65,8 +77,14 @@ class Agent {
     ellipse((location.x+0.5)*langMap.gridX, (location.y+0.5)*langMap.gridY, langMap.gridX-7, langMap.gridY-7);
   }
 
-  // returns the ID of the nearest Agent
-  int nearestAgent() {
+  /** Returns the ID of the nearest Agent
+    * <p>
+    * Searches the whole population for the nearest neighbour
+    * and returns its ID
+    * <p>
+    * @return the ID of the nearest neighbour
+    */
+  public int nearestAgent() {
     float min = langMap.mapWidth;
     for(Agent b : population.pop) {
       float dist = sqrt((location.x - b.location.x)*(location.x - b.location.x)
@@ -79,8 +97,8 @@ class Agent {
     return id;
   }
 /*
-  // returns the ID of the nearest Agent
-  int neighborAgent() {
+  // returns the ID of an agent which is 1 cell away -> used for talking
+  public int neighborAgent() {
     // Get the coordinates of the neighbour cells
     int[] upArr = {int(location.x), int(location.y - 1)};
     int[] upRightArr = {int(location.x + 1), int(location.y - 1)};
@@ -106,8 +124,9 @@ class Agent {
     if()
   }*/
 
-  // Moves the agent in a random direction
-  void move() {
+  /** Moves the agent in a random direction
+    */
+  public void move() {
 
     // Get the coordinates of the neighbour cells
     int[] upArr = {int(location.x), int(location.y - 1)};
@@ -154,9 +173,13 @@ class Agent {
 
   }
 
-  // Teleports the agent if he walks on a gate
-  // gets the coordinates from the gatesXY methods (class Map)
-  void gateTeleport() {
+  /** Teleports the agent
+    * <p>
+    * The agent is teleported if he walks on a gate.
+    * This method gets the coordinates of the gatesXY
+    * from the gatesXY methods (class Map)
+    */
+  public void gateTeleport() {
     // Teleport from A to B
     if(location.x == langMap.gates("AB")[0][0] && location.y == langMap.gates("AB")[0][1]) {
       location.x = langMap.gates("AB")[1][0];
@@ -191,8 +214,8 @@ class Agent {
     }
   }
 /*
-  // Exchange words with the nearest Agent
-  void exchangeWords() {
+  // Exchange words with the nearest Agent -> huge performance loss
+  public void exchangeWords() {
     Word exchangeWord1 = new Word("", voc.vocCls);
     Word exchangeWord2 = new Word("", voc.vocCls);
     double dist;
