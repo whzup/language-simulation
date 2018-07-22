@@ -3,7 +3,7 @@
   */
 
 class Vocabulary {
-  public int count;
+  public int wordCount;
   public ArrayList<Word> vocabulary = new ArrayList<Word>();
 
   // Classification of the vocabulary (Lingua or island)
@@ -19,7 +19,7 @@ class Vocabulary {
     *                       "l" : lingua franca vocabulary
     */
   public Vocabulary(char classification) {
-    count = 2;
+    wordCount = 2;
     vocCls = classification;
     createVocabulary();
   }
@@ -54,7 +54,7 @@ class Vocabulary {
     */
   private float zipfDist(int rank) {
     float sum = 0;
-    for(int i = 0; i < count; i++) {
+    for(int i = 0; i < wordCount; i++) {
       sum += 1/float(i);
     }
     return (1/float(rank)) / sum;
@@ -168,7 +168,7 @@ class Vocabulary {
     * Initializes the Vocabulary class with words.
     */
   public void createVocabulary() {
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < wordCount; i++) {
       Word newWord = new Word(createWord(poissonDist()), vocCls);
       vocabulary.add(newWord);
     }

@@ -9,8 +9,6 @@ class Agent {
   public int id;                 // ID of the agent
   public int currentX;           // Current Square in x-direction
   public int currentY;           // Current Square in y-direction
-  public int spawnX;             // Spawning Square in x-direction
-  public int spawnY;             // Spawning Square in y-direction
   public Vocabulary lingua;      // Vocabulary for the lingua franca
   public Vocabulary dialect;     // Vocabulary for the island dialect
 
@@ -31,10 +29,6 @@ class Agent {
 
     location = new PVector(xcoord, ycoord);
 
-    // Get the coordinates of the spawn
-    spawnX = xcoord;
-    spawnY = ycoord;
-
     // Decide on which island the agent currently is
     if(langMap.map[int(location.y)][int(location.x)] == 1) {
       island = 1;
@@ -47,13 +41,13 @@ class Agent {
     }
 
     // Decide on which island the agent spawned
-    if(langMap.map[spawnY][spawnX] == 1) {
+    if(langMap.map[ycoord][xcoord] == 1) {
       spawnIsland = 1;
     }
-    else if(langMap.map[spawnY][spawnX] == 2) {
+    else if(langMap.map[ycoord][xcoord] == 2) {
       spawnIsland = 2;
     }
-    else if(langMap.map[spawnY][spawnX] == 3) {
+    else if(langMap.map[ycoord][xcoord] == 3) {
       spawnIsland = 3;
     }
 

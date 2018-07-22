@@ -20,7 +20,7 @@ Vocabulary lingua;
 Vocabulary dialect;
 
 // All vowels that can be used for words in mutation order
-final StringList vowels = new StringList(
+static final StringList vowels = new StringList(
   "a", "\u00e4", "e", "i", "j", "o", "\u00f6", "u", "\u00fc", "y"
 );
 
@@ -143,8 +143,6 @@ class Agent {
   public int id;                 // ID of the agent
   public int currentX;           // Current Square in x-direction
   public int currentY;           // Current Square in y-direction
-  public int spawnX;             // Spawning Square in x-direction
-  public int spawnY;             // Spawning Square in y-direction
   public Vocabulary lingua;      // Vocabulary for the lingua franca
   public Vocabulary dialect;     // Vocabulary for the island dialect
 
@@ -156,6 +154,7 @@ class Agent {
     * @param xcoord The x-coordinate of the agent's spawn
     * @param ycoord The y-coordinate of the agent's spawn
     * @param lingua The vocabulary of the lingua franca
+    * @param dialect The vocabulary of the island dialect
     */
   public Agent(int xcoord, int ycoord, Vocabulary lingua, Vocabulary dialect) {
 
@@ -163,10 +162,6 @@ class Agent {
     dialect = dialect;
 
     location = new PVector(xcoord, ycoord);
-
-    // Get the coordinates of the spawn
-    spawnX = xcoord;
-    spawnY = ycoord;
 
     // Decide on which island the agent currently is
     if(langMap.map[PApplet.parseInt(location.y)][PApplet.parseInt(location.x)] == 1) {
@@ -180,13 +175,13 @@ class Agent {
     }
 
     // Decide on which island the agent spawned
-    if(langMap.map[spawnY][spawnX] == 1) {
+    if(langMap.map[ycoord][xcoord] == 1) {
       spawnIsland = 1;
     }
-    else if(langMap.map[spawnY][spawnX] == 2) {
+    else if(langMap.map[ycoord][xcoord] == 2) {
       spawnIsland = 2;
     }
-    else if(langMap.map[spawnY][spawnX] == 3) {
+    else if(langMap.map[ycoord][xcoord] == 3) {
       spawnIsland = 3;
     }
 

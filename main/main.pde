@@ -4,18 +4,18 @@ Vocabulary lingua;
 Vocabulary dialect;
 
 // All vowels that can be used for words in mutation order
-final StringList vowels = new StringList(
+static final StringList vowels = new StringList(
   "a", "ä", "e", "i", "j", "o", "ö", "u", "ü", "y"
 );
 
 // All consonants that can be used for words in mutation order
-final StringList consonants = new StringList(
+static final StringList consonants = new StringList(
   "b", "p", "d", "t", "g", "h", "k", "c", "q",
   "m", "n", "l", "r", "s", "z", "f", "v", "w", "x"
 );
 
 // All diphtongs that can be used for mutation
-final StringList diphs = new StringList(
+static final StringList diphs = new StringList(
   "aa", "ai", "aj", "ao", "au", "ay", "ea", "ee", "ei", "ej", "eo", "ey",
   "ie", "ii", "ij", "iy", "ja", "jä", "je", "ji", "jo", "ju", "jy", "oa",
   "oi", "oj", "oo", "ou", "oy", "ua", "ue", "ui", "uj", "uo", "uu", "uy",
@@ -23,23 +23,23 @@ final StringList diphs = new StringList(
 );
 
 // Consonant shifts loosely based on Grimm's law
-final StringList shift1 = new StringList(
+static final StringList shift1 = new StringList(
   "bh", "b", "p", "pf"
 );
 
-final StringList shift2 = new StringList(
+static final StringList shift2 = new StringList(
   "dh", "d", "t", "th"
 );
 
-final StringList shift3 = new StringList(
+static final StringList shift3 = new StringList(
   "gh", "g", "k", "x"
 );
 
-final StringList shift4 = new StringList(
+static final StringList shift4 = new StringList(
   "gwh", "gw", "kw", "xw"
 );
 
-final StringList shift5 = new StringList(
+static final StringList shift5 = new StringList(
   "th", "pf", "w", "h"
 );
 

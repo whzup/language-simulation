@@ -43,8 +43,8 @@ class Map {
                   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};    // The blueprint for the map
-  public int mapWidth;                                                                                          // Size of the blueprint
-  public int gridX, gridY;                                                                                      // Gridsize
+  public int mapWidth;                                                                                   // Size of the blueprint
+  public int gridX, gridY;                                                                               // Gridsize
 
   /**Map class constructor
     * <p>
