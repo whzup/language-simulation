@@ -1,15 +1,58 @@
 Map langMap;
 Population population;
-Vocabulary voc;
-Word trying;
+Vocabulary lingua;
+Vocabulary dialect;
+
+// All vowels that can be used for words in mutation order
+final StringList vowels = new StringList(
+  "a", "ä", "e", "i", "j", "o", "ö", "u", "ü", "y"
+);
+
+// All consonants that can be used for words in mutation order
+final StringList consonants = new StringList(
+  "b", "p", "d", "t", "g", "h", "k", "c", "q",
+  "m", "n", "l", "r", "s", "z", "f", "v", "w", "x"
+);
+
+// All diphtongs that can be used for mutation
+final StringList diphs = new StringList(
+  "aa", "ai", "aj", "ao", "au", "ay", "ea", "ee", "ei", "ej", "eo", "ey",
+  "ie", "ii", "ij", "iy", "ja", "jä", "je", "ji", "jo", "ju", "jy", "oa",
+  "oi", "oj", "oo", "ou", "oy", "ua", "ue", "ui", "uj", "uo", "uu", "uy",
+  "äi", "äj", "äy", "öi", "öj", "öy", "üi", "üj","üy"
+);
+
+// Consonant shifts loosely based on Grimm's law
+final StringList shift1 = new StringList(
+  "bh", "b", "p", "pf"
+);
+
+final StringList shift2 = new StringList(
+  "dh", "d", "t", "th"
+);
+
+final StringList shift3 = new StringList(
+  "gh", "g", "k", "x"
+);
+
+final StringList shift4 = new StringList(
+  "gwh", "gw", "kw", "xw"
+);
+
+final StringList shift5 = new StringList(
+  "th", "pf", "w", "h"
+);
 
 void setup() {
   size(1000, 1000);
   langMap = new Map();
   population = new Population();
-  voc = new Vocabulary('l');
-  for(int i = 0; i < voc.count; i++) {
-    Word w = voc.vocabulary.get(i);
+  lingua = new Vocabulary('l');
+  dialect = new Vocabulary('i');
+
+  // print the words in the lingua franca vocabulary
+  for(int i = 0; i < lingua.count; i++) {
+    Word w = lingua.vocabulary.get(i);
     print(w.letters,"\n");
   }
   randomSeed(1);

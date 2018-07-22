@@ -3,42 +3,13 @@
   */
 
 class Word {
-  int length;     // Length of the word
+  public int length;     // Length of the word
   // int island;     // Island to whose vocabulary the word belongs
   // int parent;     // ID of the agent that created the word USEFUL?
-  String letters; // Letters which the word contains
-  String[] etym;  // Origin of the word; from which word it was derived
-  char vocClass;  // Classification of the word in the different vocabularies
-                  // i = island; l = lingua
-
-  // All diphtongs that can be used for mutation
-  StringList diphs = new StringList(
-    "aa", "ai", "aj", "ao", "au", "ay", "ea", "ee", "ei", "ej", "eo", "ey",
-    "ie", "ii", "ij", "iy", "ja", "jä", "je", "ji", "jo", "ju", "jy", "oa",
-    "oi", "oj", "oo", "ou", "oy", "ua", "ue", "ui", "uj", "uo", "uu", "uy",
-    "äi", "äj", "äy", "öi", "öj", "öy", "üi", "üj","üy"
-  );
-
-  // Consonant shifts loosely based on Grimm's law
-  StringList shift1 = new StringList(
-    "bh", "b", "p", "pf"
-  );
-
-  StringList shift2 = new StringList(
-    "dh", "d", "t", "th"
-  );
-
-  StringList shift3 = new StringList(
-    "gh", "g", "k", "x"
-  );
-
-  StringList shift4 = new StringList(
-    "gwh", "gw", "kw", "xw"
-  );
-
-  StringList shift5 = new StringList(
-    "th", "pf", "w", "h"
-  );
+  public String letters; // Letters which the word contains
+  public String[] etym;  // Origin of the word; from which word it was derived
+  public char vocClass;  // Classification of the word in the different vocabularies
+                         // i = island; l = lingua
 
   /** Word class constructor
     * <p>
@@ -63,24 +34,24 @@ class Word {
     */
   public void mutateVowel() {
     int max_random = 100;
-    for(int i = 0; i < voc.vowels.size(); i++) {
+    for(int i = 0; i < vowels.size(); i++) {
       int newIndex;
-      String vowel = voc.vowels.get(i);
+      String vowel = vowels.get(i);
       if(letters.contains(vowel)) {
         float prob = random(max_random);
         if(prob < 3) {
           // The vowels can shift either forwards or backwards in the array
           int dir = int(random(3)) - 1;
-          if(i == voc.vowels.size() - 1 && dir > 0) {
+          if(i == vowels.size() - 1 && dir > 0) {
             newIndex = 0;
           }
           else if(i == 0 && dir < 0) {
-            newIndex = voc.vowels.size() - 1;
+            newIndex = vowels.size() - 1;
           }
           else{
             newIndex = i + dir;
           }
-          String newVowel = voc.vowels.get(newIndex);
+          String newVowel = vowels.get(newIndex);
           letters = letters.replaceFirst(vowel, newVowel);
           break;
         }

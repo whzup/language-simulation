@@ -2,9 +2,9 @@
   * @author Aaron
   */
 class Population {
-  int count;                                                        // Number of agents in the population
-  ArrayList<Agent> pop;                                             // ArrayList with all the agents in it
-  int[][] agentMap = new int[langMap.mapWidth][langMap.mapWidth];   // Map with all agents
+  public int count;                                                        // Number of agents in the population
+  public ArrayList<Agent> pop;                                             // ArrayList with all the agents in it
+  public int[][] agentMap = new int[langMap.mapWidth][langMap.mapWidth];   // Map with all agents
 
 
   /** Population class constructor
@@ -42,7 +42,7 @@ class Population {
       while(i < count) {
         // Only create an agent when the spawning location is on an island (or gate)
         // Might be efficient, as this algorithm does not scan the whole map
-        Agent agent = new Agent(int(random(langMap.mapWidth)),int(random(langMap.mapWidth)), voc);
+        Agent agent = new Agent(int(random(langMap.mapWidth)),int(random(langMap.mapWidth)), lingua, dialect);
         if(langMap.map[int(agent.location.y)][int(agent.location.x)] != 0 && agent.location.x > 0 && agent.location.y > 0) {
           agent.display();
           pop.add(agent);

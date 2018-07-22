@@ -16,16 +16,59 @@ public class main extends PApplet {
 
 Map langMap;
 Population population;
-Vocabulary voc;
-Word trying;
+Vocabulary lingua;
+Vocabulary dialect;
+
+// All vowels that can be used for words in mutation order
+final StringList vowels = new StringList(
+  "a", "\u00e4", "e", "i", "j", "o", "\u00f6", "u", "\u00fc", "y"
+);
+
+// All consonants that can be used for words in mutation order
+final StringList consonants = new StringList(
+  "b", "p", "d", "t", "g", "h", "k", "c", "q",
+  "m", "n", "l", "r", "s", "z", "f", "v", "w", "x"
+);
+
+// All diphtongs that can be used for mutation
+final StringList diphs = new StringList(
+  "aa", "ai", "aj", "ao", "au", "ay", "ea", "ee", "ei", "ej", "eo", "ey",
+  "ie", "ii", "ij", "iy", "ja", "j\u00e4", "je", "ji", "jo", "ju", "jy", "oa",
+  "oi", "oj", "oo", "ou", "oy", "ua", "ue", "ui", "uj", "uo", "uu", "uy",
+  "\u00e4i", "\u00e4j", "\u00e4y", "\u00f6i", "\u00f6j", "\u00f6y", "\u00fci", "\u00fcj","\u00fcy"
+);
+
+// Consonant shifts loosely based on Grimm's law
+final StringList shift1 = new StringList(
+  "bh", "b", "p", "pf"
+);
+
+final StringList shift2 = new StringList(
+  "dh", "d", "t", "th"
+);
+
+final StringList shift3 = new StringList(
+  "gh", "g", "k", "x"
+);
+
+final StringList shift4 = new StringList(
+  "gwh", "gw", "kw", "xw"
+);
+
+final StringList shift5 = new StringList(
+  "th", "pf", "w", "h"
+);
 
 public void setup() {
   
   langMap = new Map();
   population = new Population();
-  voc = new Vocabulary('l');
-  for(int i = 0; i < voc.count; i++) {
-    Word w = voc.vocabulary.get(i);
+  lingua = new Vocabulary('l');
+  dialect = new Vocabulary('i');
+
+  // print the words in the lingua franca vocabulary
+  for(int i = 0; i < lingua.count; i++) {
+    Word w = lingua.vocabulary.get(i);
     print(w.letters,"\n");
   }
   randomSeed(1);
@@ -94,29 +137,30 @@ TODO talking:
   */
 
 class Agent {
-  PVector location;       // Current position of the agent
-  int island;             // Current island
-  int spawnIsland;        // Island on which the agent spawned
-  int id;                 // ID of the agent
-  int currentX;           // Current Square in x-direction
-  int currentY;           // Current Square in y-direction
-  int spawnX;             // Spawning Square in x-direction
-  int spawnY;             // Spawning Square in y-direction
-  Vocabulary vocab;       // Vocabulary
+  public PVector location;       // Current position of the agent
+  public int island;             // Current island
+  public int spawnIsland;        // Island on which the agent spawned
+  public int id;                 // ID of the agent
+  public int currentX;           // Current Square in x-direction
+  public int currentY;           // Current Square in y-direction
+  public int spawnX;             // Spawning Square in x-direction
+  public int spawnY;             // Spawning Square in y-direction
+  public Vocabulary lingua;      // Vocabulary for the lingua franca
+  public Vocabulary dialect;     // Vocabulary for the island dialect
 
-  // TODO create a vocabulary and insert it into every agent
   /** Agent class constructor
     * <p>
     * The agent class includes the methods to move, teleport
-    * and exchange vocabulary with other agents.
+    * and exchange linguaulary with other agents.
     * <p>
     * @param xcoord The x-coordinate of the agent's spawn
     * @param ycoord The y-coordinate of the agent's spawn
     * @param lingua The vocabulary of the lingua franca
     */
-  public Agent(int xcoord, int ycoord, Vocabulary lingua) {
+  public Agent(int xcoord, int ycoord, Vocabulary lingua, Vocabulary dialect) {
 
-    vocab = lingua;
+    lingua = lingua;
+    dialect = dialect;
 
     location = new PVector(xcoord, ycoord);
 
@@ -319,14 +363,14 @@ class Agent {
           // Only exchange words if the agent is near enough
           if(dist <= 1.5) {
             // Random index
-            int changeIndex = int(random(vocab.count-1));
+            int changeIndex = int(random(lingua.count-1));
             // Take a word from the nearest agent
-            exchangeWord1 = comm.vocab.vocabulary.get(changeIndex);
-            comm.vocab.vocabulary.remove(changeIndex);
+            exchangeWord1 = comm.lingua.linguaulary.get(changeIndex);
+            comm.lingua.linguaulary.remove(changeIndex);
 
             // Take a word from the agent
-            exchangeWord2 = vocab.vocabulary.get(changeIndex);
-            vocab.vocabulary.remove(changeIndex);
+            exchangeWord2 = lingua.linguaulary.get(changeIndex);
+            lingua.linguaulary.remove(changeIndex);
 
             // Mutate the word
             exchangeWord1.mutateVowel();
@@ -339,8 +383,8 @@ class Agent {
             exchangeWord2.doubleConsonant();
 
             // Exchange the words
-            comm.vocab.vocabulary.add(exchangeWord1);
-            vocab.vocabulary.add(exchangeWord2);
+            comm.lingua.linguaulary.add(exchangeWord1);
+            lingua.linguaulary.add(exchangeWord2);
           }
         }
       }
@@ -353,7 +397,7 @@ class Agent {
   */
 
 class Map {
-  int[][] map = { {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+  public int[][] map = { {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                   {0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                   {0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -393,8 +437,8 @@ class Map {
                   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};    // The blueprint for the map
-  int mapWidth;                                                                                          // Size of the blueprint
-  int gridX, gridY;                                                                                      // Gridsize
+  public int mapWidth;                                                                                          // Size of the blueprint
+  public int gridX, gridY;                                                                                      // Gridsize
 
   /**Map class constructor
     * <p>
@@ -582,9 +626,9 @@ class Map {
   * @author Aaron
   */
 class Population {
-  int count;                                                        // Number of agents in the population
-  ArrayList<Agent> pop;                                             // ArrayList with all the agents in it
-  int[][] agentMap = new int[langMap.mapWidth][langMap.mapWidth];   // Map with all agents
+  public int count;                                                        // Number of agents in the population
+  public ArrayList<Agent> pop;                                             // ArrayList with all the agents in it
+  public int[][] agentMap = new int[langMap.mapWidth][langMap.mapWidth];   // Map with all agents
 
 
   /** Population class constructor
@@ -622,7 +666,7 @@ class Population {
       while(i < count) {
         // Only create an agent when the spawning location is on an island (or gate)
         // Might be efficient, as this algorithm does not scan the whole map
-        Agent agent = new Agent(PApplet.parseInt(random(langMap.mapWidth)),PApplet.parseInt(random(langMap.mapWidth)), voc);
+        Agent agent = new Agent(PApplet.parseInt(random(langMap.mapWidth)),PApplet.parseInt(random(langMap.mapWidth)), lingua, dialect);
         if(langMap.map[PApplet.parseInt(agent.location.y)][PApplet.parseInt(agent.location.x)] != 0 && agent.location.x > 0 && agent.location.y > 0) {
           agent.display();
           pop.add(agent);
@@ -663,22 +707,11 @@ class Population {
   */
 
 class Vocabulary {
-  int count;
-  ArrayList<Word> vocabulary = new ArrayList<Word>();
-
-  // All vowels that can be used for words in mutation order
-  StringList vowels = new StringList(
-    "a", "\u00e4", "e", "i", "j", "o", "\u00f6", "u", "\u00fc", "y"
-  );
-
-  // All consonants that can be used for words in mutation order
-  StringList consonants = new StringList(
-    "b", "p", "d", "t", "g", "h", "k", "c", "q",
-    "m", "n", "l", "r", "s", "z", "f", "v", "w", "x"
-  );
+  public int count;
+  public ArrayList<Word> vocabulary = new ArrayList<Word>();
 
   // Classification of the vocabulary (Lingua or island)
-  char vocCls;
+  public char vocCls;
 
   /** Vocabulary class constructor
     * <p>
@@ -851,42 +884,13 @@ class Vocabulary {
   */
 
 class Word {
-  int length;     // Length of the word
+  public int length;     // Length of the word
   // int island;     // Island to whose vocabulary the word belongs
   // int parent;     // ID of the agent that created the word USEFUL?
-  String letters; // Letters which the word contains
-  String[] etym;  // Origin of the word; from which word it was derived
-  char vocClass;  // Classification of the word in the different vocabularies
-                  // i = island; l = lingua
-
-  // All diphtongs that can be used for mutation
-  StringList diphs = new StringList(
-    "aa", "ai", "aj", "ao", "au", "ay", "ea", "ee", "ei", "ej", "eo", "ey",
-    "ie", "ii", "ij", "iy", "ja", "j\u00e4", "je", "ji", "jo", "ju", "jy", "oa",
-    "oi", "oj", "oo", "ou", "oy", "ua", "ue", "ui", "uj", "uo", "uu", "uy",
-    "\u00e4i", "\u00e4j", "\u00e4y", "\u00f6i", "\u00f6j", "\u00f6y", "\u00fci", "\u00fcj","\u00fcy"
-  );
-
-  // Consonant shifts loosely based on Grimm's law
-  StringList shift1 = new StringList(
-    "bh", "b", "p", "pf"
-  );
-
-  StringList shift2 = new StringList(
-    "dh", "d", "t", "th"
-  );
-
-  StringList shift3 = new StringList(
-    "gh", "g", "k", "x"
-  );
-
-  StringList shift4 = new StringList(
-    "gwh", "gw", "kw", "xw"
-  );
-
-  StringList shift5 = new StringList(
-    "th", "pf", "w", "h"
-  );
+  public String letters; // Letters which the word contains
+  public String[] etym;  // Origin of the word; from which word it was derived
+  public char vocClass;  // Classification of the word in the different vocabularies
+                         // i = island; l = lingua
 
   /** Word class constructor
     * <p>
@@ -911,24 +915,24 @@ class Word {
     */
   public void mutateVowel() {
     int max_random = 100;
-    for(int i = 0; i < voc.vowels.size(); i++) {
+    for(int i = 0; i < vowels.size(); i++) {
       int newIndex;
-      String vowel = voc.vowels.get(i);
+      String vowel = vowels.get(i);
       if(letters.contains(vowel)) {
         float prob = random(max_random);
         if(prob < 3) {
           // The vowels can shift either forwards or backwards in the array
           int dir = PApplet.parseInt(random(3)) - 1;
-          if(i == voc.vowels.size() - 1 && dir > 0) {
+          if(i == vowels.size() - 1 && dir > 0) {
             newIndex = 0;
           }
           else if(i == 0 && dir < 0) {
-            newIndex = voc.vowels.size() - 1;
+            newIndex = vowels.size() - 1;
           }
           else{
             newIndex = i + dir;
           }
-          String newVowel = voc.vowels.get(newIndex);
+          String newVowel = vowels.get(newIndex);
           letters = letters.replaceFirst(vowel, newVowel);
           break;
         }

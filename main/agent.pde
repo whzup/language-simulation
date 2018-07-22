@@ -3,29 +3,31 @@
   */
 
 class Agent {
-  PVector location;       // Current position of the agent
-  int island;             // Current island
-  int spawnIsland;        // Island on which the agent spawned
-  int id;                 // ID of the agent
-  int currentX;           // Current Square in x-direction
-  int currentY;           // Current Square in y-direction
-  int spawnX;             // Spawning Square in x-direction
-  int spawnY;             // Spawning Square in y-direction
-  Vocabulary vocab;       // Vocabulary
+  public PVector location;       // Current position of the agent
+  public int island;             // Current island
+  public int spawnIsland;        // Island on which the agent spawned
+  public int id;                 // ID of the agent
+  public int currentX;           // Current Square in x-direction
+  public int currentY;           // Current Square in y-direction
+  public int spawnX;             // Spawning Square in x-direction
+  public int spawnY;             // Spawning Square in y-direction
+  public Vocabulary lingua;      // Vocabulary for the lingua franca
+  public Vocabulary dialect;     // Vocabulary for the island dialect
 
-  // TODO create a vocabulary and insert it into every agent
   /** Agent class constructor
     * <p>
     * The agent class includes the methods to move, teleport
-    * and exchange vocabulary with other agents.
+    * and exchange linguaulary with other agents.
     * <p>
     * @param xcoord The x-coordinate of the agent's spawn
     * @param ycoord The y-coordinate of the agent's spawn
     * @param lingua The vocabulary of the lingua franca
+    * @param dialect The vocabulary of the island dialect
     */
-  public Agent(int xcoord, int ycoord, Vocabulary lingua) {
+  public Agent(int xcoord, int ycoord, Vocabulary lingua, Vocabulary dialect) {
 
-    vocab = lingua;
+    lingua = lingua;
+    dialect = dialect;
 
     location = new PVector(xcoord, ycoord);
 
@@ -228,14 +230,14 @@ class Agent {
           // Only exchange words if the agent is near enough
           if(dist <= 1.5) {
             // Random index
-            int changeIndex = int(random(vocab.count-1));
+            int changeIndex = int(random(lingua.count-1));
             // Take a word from the nearest agent
-            exchangeWord1 = comm.vocab.vocabulary.get(changeIndex);
-            comm.vocab.vocabulary.remove(changeIndex);
+            exchangeWord1 = comm.lingua.linguaulary.get(changeIndex);
+            comm.lingua.linguaulary.remove(changeIndex);
 
             // Take a word from the agent
-            exchangeWord2 = vocab.vocabulary.get(changeIndex);
-            vocab.vocabulary.remove(changeIndex);
+            exchangeWord2 = lingua.linguaulary.get(changeIndex);
+            lingua.linguaulary.remove(changeIndex);
 
             // Mutate the word
             exchangeWord1.mutateVowel();
@@ -248,8 +250,8 @@ class Agent {
             exchangeWord2.doubleConsonant();
 
             // Exchange the words
-            comm.vocab.vocabulary.add(exchangeWord1);
-            vocab.vocabulary.add(exchangeWord2);
+            comm.lingua.linguaulary.add(exchangeWord1);
+            lingua.linguaulary.add(exchangeWord2);
           }
         }
       }

@@ -3,22 +3,11 @@
   */
 
 class Vocabulary {
-  int count;
-  ArrayList<Word> vocabulary = new ArrayList<Word>();
-
-  // All vowels that can be used for words in mutation order
-  StringList vowels = new StringList(
-    "a", "ä", "e", "i", "j", "o", "ö", "u", "ü", "y"
-  );
-
-  // All consonants that can be used for words in mutation order
-  StringList consonants = new StringList(
-    "b", "p", "d", "t", "g", "h", "k", "c", "q",
-    "m", "n", "l", "r", "s", "z", "f", "v", "w", "x"
-  );
+  public int count;
+  public ArrayList<Word> vocabulary = new ArrayList<Word>();
 
   // Classification of the vocabulary (Lingua or island)
-  char vocCls;
+  public char vocCls;
 
   /** Vocabulary class constructor
     * <p>
