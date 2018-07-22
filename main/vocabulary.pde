@@ -19,8 +19,8 @@ class Vocabulary {
     *                       "l" : lingua franca vocabulary
     */
   public Vocabulary(char classification) {
-    wordCount = 2;
-    vocCls = classification;
+    this.wordCount = 10;
+    this.vocCls = classification;
     createVocabulary();
   }
 

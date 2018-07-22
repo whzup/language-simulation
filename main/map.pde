@@ -53,9 +53,9 @@ class Map {
     * coloring and modeling of the world.
     */
   public Map() {
-    mapWidth = 40;
-    gridX = width/mapWidth;
-    gridY = height/mapWidth;
+    this.mapWidth = 40;
+    this.gridX = width/mapWidth;
+    this.gridY = height/mapWidth;
   }
 
   /** Returns the area of the island

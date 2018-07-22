@@ -25,13 +25,13 @@ static final StringList vowels = new StringList(
 );
 
 // All consonants that can be used for words in mutation order
-final StringList consonants = new StringList(
+static final StringList consonants = new StringList(
   "b", "p", "d", "t", "g", "h", "k", "c", "q",
   "m", "n", "l", "r", "s", "z", "f", "v", "w", "x"
 );
 
 // All diphtongs that can be used for mutation
-final StringList diphs = new StringList(
+static final StringList diphs = new StringList(
   "aa", "ai", "aj", "ao", "au", "ay", "ea", "ee", "ei", "ej", "eo", "ey",
   "ie", "ii", "ij", "iy", "ja", "j\u00e4", "je", "ji", "jo", "ju", "jy", "oa",
   "oi", "oj", "oo", "ou", "oy", "ua", "ue", "ui", "uj", "uo", "uu", "uy",
@@ -39,39 +39,38 @@ final StringList diphs = new StringList(
 );
 
 // Consonant shifts loosely based on Grimm's law
-final StringList shift1 = new StringList(
+static final StringList shift1 = new StringList(
   "bh", "b", "p", "pf"
 );
 
-final StringList shift2 = new StringList(
+static final StringList shift2 = new StringList(
   "dh", "d", "t", "th"
 );
 
-final StringList shift3 = new StringList(
+static final StringList shift3 = new StringList(
   "gh", "g", "k", "x"
 );
 
-final StringList shift4 = new StringList(
+static final StringList shift4 = new StringList(
   "gwh", "gw", "kw", "xw"
 );
 
-final StringList shift5 = new StringList(
+static final StringList shift5 = new StringList(
   "th", "pf", "w", "h"
 );
 
 public void setup() {
   
   langMap = new Map();
-  population = new Population();
+  population = new Population(15);
   lingua = new Vocabulary('l');
   dialect = new Vocabulary('i');
 
   // print the words in the lingua franca vocabulary
-  for(int i = 0; i < lingua.count; i++) {
+  for(int i = 0; i < lingua.wordCount; i++) {
     Word w = lingua.vocabulary.get(i);
     print(w.letters,"\n");
   }
-  randomSeed(1);
 }
 
 public void draw() {
@@ -158,35 +157,35 @@ class Agent {
     */
   public Agent(int xcoord, int ycoord, Vocabulary lingua, Vocabulary dialect) {
 
-    lingua = lingua;
-    dialect = dialect;
+    this.lingua = lingua;
+    this.dialect = dialect;
 
-    location = new PVector(xcoord, ycoord);
+    this.location = new PVector(xcoord, ycoord);
 
     // Decide on which island the agent currently is
     if(langMap.map[PApplet.parseInt(location.y)][PApplet.parseInt(location.x)] == 1) {
-      island = 1;
+      this.island = 1;
     }
     else if(langMap.map[PApplet.parseInt(location.y)][PApplet.parseInt(location.x)] == 2) {
-      island = 2;
+      this.island = 2;
     }
     else if(langMap.map[PApplet.parseInt(location.y)][PApplet.parseInt(location.x)] == 3) {
-      island = 3;
+      this.island = 3;
     }
 
     // Decide on which island the agent spawned
     if(langMap.map[ycoord][xcoord] == 1) {
-      spawnIsland = 1;
+      this.spawnIsland = 1;
     }
     else if(langMap.map[ycoord][xcoord] == 2) {
-      spawnIsland = 2;
+      this.spawnIsland = 2;
     }
     else if(langMap.map[ycoord][xcoord] == 3) {
-      spawnIsland = 3;
+      this.spawnIsland = 3;
     }
 
     // Give the agent a random ID
-    id = PApplet.parseInt(random(PApplet.parseFloat(MAX_INT)));
+    this.id = PApplet.parseInt(random(PApplet.parseFloat(MAX_INT)));
   }
 
   /** Displays the agent
@@ -343,11 +342,9 @@ class Agent {
       location.y = langMap.gates("BC")[0][1];
     }
   }
-/*
+
   // Exchange words with the nearest Agent -> huge performance loss
   public void exchangeWords() {
-    Word exchangeWord1 = new Word("", voc.vocCls);
-    Word exchangeWord2 = new Word("", voc.vocCls);
     double dist;
     for(int j = 0; j < 5;j++) {
       for(int i = 0; i < population.count; i++) {
@@ -356,16 +353,16 @@ class Agent {
           dist = sqrt((comm.location.x - location.x) * (comm.location.x - location.x)
                       + (comm.location.y - location.y) * (comm.location.y - location.y));
           // Only exchange words if the agent is near enough
-          if(dist <= 1.5) {
+          if(dist <= 1.5f) {
             // Random index
-            int changeIndex = int(random(lingua.count-1));
+            int changeIndex = PApplet.parseInt(random(lingua.wordCount-1));
             // Take a word from the nearest agent
-            exchangeWord1 = comm.lingua.linguaulary.get(changeIndex);
-            comm.lingua.linguaulary.remove(changeIndex);
+            Word exchangeWord1 = comm.lingua.vocabulary.get(changeIndex);
+            comm.lingua.vocabulary.remove(changeIndex);
 
             // Take a word from the agent
-            exchangeWord2 = lingua.linguaulary.get(changeIndex);
-            lingua.linguaulary.remove(changeIndex);
+            Word exchangeWord2 = lingua.vocabulary.get(changeIndex);
+            lingua.vocabulary.remove(changeIndex);
 
             // Mutate the word
             exchangeWord1.mutateVowel();
@@ -378,14 +375,14 @@ class Agent {
             exchangeWord2.doubleConsonant();
 
             // Exchange the words
-            comm.lingua.linguaulary.add(exchangeWord1);
-            lingua.linguaulary.add(exchangeWord2);
+            comm.lingua.vocabulary.add(exchangeWord1);
+            lingua.vocabulary.add(exchangeWord2);
+            print("\"" + exchangeWord1.letters + "\" was exchanged for \"" + exchangeWord2.letters + "\"\n");
           }
         }
       }
     }
-    //print("\"" + exchangeWord1.letters + "\" was exchanged for \"" + exchangeWord2.letters + "\"\n");
-  }*/
+  }
 }
 /**
   * @author Aaron
@@ -432,8 +429,8 @@ class Map {
                   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};    // The blueprint for the map
-  public int mapWidth;                                                                                          // Size of the blueprint
-  public int gridX, gridY;                                                                                      // Gridsize
+  public int mapWidth;                                                                                   // Size of the blueprint
+  public int gridX, gridY;                                                                               // Gridsize
 
   /**Map class constructor
     * <p>
@@ -442,9 +439,9 @@ class Map {
     * coloring and modeling of the world.
     */
   public Map() {
-    mapWidth = 40;
-    gridX = width/mapWidth;
-    gridY = height/mapWidth;
+    this.mapWidth = 40;
+    this.gridX = width/mapWidth;
+    this.gridY = height/mapWidth;
   }
 
   /** Returns the area of the island
@@ -631,10 +628,12 @@ class Population {
     * The population class includes methods to control the behaviour of all agents
     * currently on the map. It creates a binary grid with all the positions of agents
     * so it can be considered in the move-method.
+    * <p>
+    * @param count Number of agents in the population
     */
-  public Population() {
-    count = 15;
-    pop = new ArrayList<Agent>();
+  public Population(int count) {
+    this.count = count;
+    this.pop = new ArrayList<Agent>();
   }
 
   /** Resets the agentMap
@@ -678,7 +677,7 @@ class Population {
         for(Agent b: pop) {
           agentMap[PApplet.parseInt(b.location.y)][PApplet.parseInt(b.location.x)] = 1;
         }
-        //a.exchangeWords();
+        a.exchangeWords();
         a.gateTeleport();
         a.move();
         a.display();
@@ -702,7 +701,7 @@ class Population {
   */
 
 class Vocabulary {
-  public int count;
+  public int wordCount;
   public ArrayList<Word> vocabulary = new ArrayList<Word>();
 
   // Classification of the vocabulary (Lingua or island)
@@ -718,8 +717,8 @@ class Vocabulary {
     *                       "l" : lingua franca vocabulary
     */
   public Vocabulary(char classification) {
-    count = 2;
-    vocCls = classification;
+    this.wordCount = 10;
+    this.vocCls = classification;
     createVocabulary();
   }
 
@@ -753,7 +752,7 @@ class Vocabulary {
     */
   private float zipfDist(int rank) {
     float sum = 0;
-    for(int i = 0; i < count; i++) {
+    for(int i = 0; i < wordCount; i++) {
       sum += 1/PApplet.parseFloat(i);
     }
     return (1/PApplet.parseFloat(rank)) / sum;
@@ -867,7 +866,7 @@ class Vocabulary {
     * Initializes the Vocabulary class with words.
     */
   public void createVocabulary() {
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < wordCount; i++) {
       Word newWord = new Word(createWord(poissonDist()), vocCls);
       vocabulary.add(newWord);
     }
@@ -898,9 +897,9 @@ class Word {
     *                       "l" : lingua franca vocabulary
     */
   public Word(String word, char classification) {
-    letters = word;
-    length = word.length();
-    vocClass = classification;
+    this.letters = word;
+    this.length = word.length();
+    this.vocClass = classification;
   }
 
   /** Mutate the vowels in the word.

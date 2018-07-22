@@ -12,10 +12,12 @@ class Population {
     * The population class includes methods to control the behaviour of all agents
     * currently on the map. It creates a binary grid with all the positions of agents
     * so it can be considered in the move-method.
+    * <p>
+    * @param count Number of agents in the population
     */
-  public Population() {
-    count = 15;
-    pop = new ArrayList<Agent>();
+  public Population(int count) {
+    this.count = count;
+    this.pop = new ArrayList<Agent>();
   }
 
   /** Resets the agentMap
@@ -59,7 +61,7 @@ class Population {
         for(Agent b: pop) {
           agentMap[int(b.location.y)][int(b.location.x)] = 1;
         }
-        //a.exchangeWords();
+        a.exchangeWords();
         a.gateTeleport();
         a.move();
         a.display();

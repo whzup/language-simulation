@@ -22,9 +22,9 @@ class Word {
     *                       "l" : lingua franca vocabulary
     */
   public Word(String word, char classification) {
-    letters = word;
-    length = word.length();
-    vocClass = classification;
+    this.letters = word;
+    this.length = word.length();
+    this.vocClass = classification;
   }
 
   /** Mutate the vowels in the word.

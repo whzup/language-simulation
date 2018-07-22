@@ -46,16 +46,15 @@ static final StringList shift5 = new StringList(
 void setup() {
   size(1000, 1000);
   langMap = new Map();
-  population = new Population();
+  population = new Population(15);
   lingua = new Vocabulary('l');
   dialect = new Vocabulary('i');
 
   // print the words in the lingua franca vocabulary
-  for(int i = 0; i < lingua.count; i++) {
+  for(int i = 0; i < lingua.wordCount; i++) {
     Word w = lingua.vocabulary.get(i);
     print(w.letters,"\n");
   }
-  randomSeed(1);
 }
 
 void draw() {

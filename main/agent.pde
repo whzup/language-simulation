@@ -24,35 +24,35 @@ class Agent {
     */
   public Agent(int xcoord, int ycoord, Vocabulary lingua, Vocabulary dialect) {
 
-    lingua = lingua;
-    dialect = dialect;
+    this.lingua = lingua;
+    this.dialect = dialect;
 
-    location = new PVector(xcoord, ycoord);
+    this.location = new PVector(xcoord, ycoord);
 
     // Decide on which island the agent currently is
     if(langMap.map[int(location.y)][int(location.x)] == 1) {
-      island = 1;
+      this.island = 1;
     }
     else if(langMap.map[int(location.y)][int(location.x)] == 2) {
-      island = 2;
+      this.island = 2;
     }
     else if(langMap.map[int(location.y)][int(location.x)] == 3) {
-      island = 3;
+      this.island = 3;
     }
 
     // Decide on which island the agent spawned
     if(langMap.map[ycoord][xcoord] == 1) {
-      spawnIsland = 1;
+      this.spawnIsland = 1;
     }
     else if(langMap.map[ycoord][xcoord] == 2) {
-      spawnIsland = 2;
+      this.spawnIsland = 2;
     }
     else if(langMap.map[ycoord][xcoord] == 3) {
-      spawnIsland = 3;
+      this.spawnIsland = 3;
     }
 
     // Give the agent a random ID
-    id = int(random(float(MAX_INT)));
+    this.id = int(random(float(MAX_INT)));
   }
 
   /** Displays the agent
@@ -209,11 +209,9 @@ class Agent {
       location.y = langMap.gates("BC")[0][1];
     }
   }
-/*
+
   // Exchange words with the nearest Agent -> huge performance loss
   public void exchangeWords() {
-    Word exchangeWord1 = new Word("", voc.vocCls);
-    Word exchangeWord2 = new Word("", voc.vocCls);
     double dist;
     for(int j = 0; j < 5;j++) {
       for(int i = 0; i < population.count; i++) {
@@ -224,14 +222,14 @@ class Agent {
           // Only exchange words if the agent is near enough
           if(dist <= 1.5) {
             // Random index
-            int changeIndex = int(random(lingua.count-1));
+            int changeIndex = int(random(lingua.wordCount-1));
             // Take a word from the nearest agent
-            exchangeWord1 = comm.lingua.linguaulary.get(changeIndex);
-            comm.lingua.linguaulary.remove(changeIndex);
+            Word exchangeWord1 = comm.lingua.vocabulary.get(changeIndex);
+            comm.lingua.vocabulary.remove(changeIndex);
 
             // Take a word from the agent
-            exchangeWord2 = lingua.linguaulary.get(changeIndex);
-            lingua.linguaulary.remove(changeIndex);
+            Word exchangeWord2 = lingua.vocabulary.get(changeIndex);
+            lingua.vocabulary.remove(changeIndex);
 
             // Mutate the word
             exchangeWord1.mutateVowel();
@@ -244,12 +242,12 @@ class Agent {
             exchangeWord2.doubleConsonant();
 
             // Exchange the words
-            comm.lingua.linguaulary.add(exchangeWord1);
-            lingua.linguaulary.add(exchangeWord2);
+            comm.lingua.vocabulary.add(exchangeWord1);
+            lingua.vocabulary.add(exchangeWord2);
+            print("\"" + exchangeWord1.letters + "\" was exchanged for \"" + exchangeWord2.letters + "\"\n");
           }
         }
       }
     }
-    //print("\"" + exchangeWord1.letters + "\" was exchanged for \"" + exchangeWord2.letters + "\"\n");
-  }*/
+  }
 }
