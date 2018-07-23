@@ -4,11 +4,12 @@ If you want to contribute feel free to have a look into the issues section.
 
 **Planned features:**
 
-* Add a data structure to find the nearest neighbours more efficiently (maybe a QuadTree?).
+* Add a data structure or algorithm to find the nearest neighbours more efficiently.
 * Add a more efficient way to communicate between agents.
-* Add a island-based vocabulary.
-* Add a lingua franca in which agents from different islands can talk to each other.
-* Add a log for the exchanged words.
-* Add Etymology for the words so one can view the history of different words.
+* Agents from the same island should speak in the island dialect.
+* Agents from different island should be able to speak in a lingua franca to each other.
+* The changed words should appear in a log inside the GUI.
+* Words should have Etymology so one can view their history.
+* Agents should be able to talk in sentences
 
 ![Demo Picture](https://github.com/whzup/language-simulation/blob/master/demo.PNG)
