@@ -113,8 +113,8 @@ class Word {
     for(int i = 1; i < length; i++) {
       prob = random(max_random);
       // D's can only be doubled if the preceding letter is
-      // an 'e' or an 'ä'
-      if(letterArray[i] == 'd' && (letterArray[i-1] == 'e' || letterArray[i-1] == 'ä')) {
+      // an 'e' or an 'i'
+      if(letterArray[i] == 'd' && (letterArray[i-1] == 'e' || letterArray[i-1] == 'i')) {
         doubleLetter = 'd';
         index = i;
         if(prob < 0.5 * max_random) {

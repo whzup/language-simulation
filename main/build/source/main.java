@@ -21,7 +21,7 @@ Vocabulary dialect;
 
 // All vowels that can be used for words in mutation order
 static final StringList vowels = new StringList(
-  "a", "\u00e4", "e", "i", "j", "o", "\u00f6", "u", "\u00fc", "y"
+  "a", "e", "i", "j", "o", "u", "y"
 );
 
 // All consonants that can be used for words in mutation order
@@ -34,9 +34,7 @@ static final StringList consonants = new StringList(
 static final StringList diphs = new StringList(
   "aa", "ai", "aj", "ao", "au", "ay", "ea", "ee", "ei", "ej", "eo", "ey",
   "ie", "ii", "ij", "iy", "ja", "j\u00e4", "je", "ji", "jo", "ju", "jy", "oa",
-  "oi", "oj", "oo", "ou", "oy", "ua", "ue", "ui", "uj", "uo", "uu", "uy",
-  "\u00e4i", "\u00e4j", "\u00e4y", "\u00f6i", "\u00f6j", "\u00f6y", "\u00fci", "\u00fcj","\u00fcy"
-);
+  "oi", "oj", "oo", "ou", "oy", "ua", "ue", "ui", "uj", "uo", "uu", "uy");
 
 // Consonant shifts loosely based on Grimm's law
 static final StringList shift1 = new StringList(
@@ -988,8 +986,8 @@ class Word {
     for(int i = 1; i < length; i++) {
       prob = random(max_random);
       // D's can only be doubled if the preceding letter is
-      // an 'e' or an '\u00e4'
-      if(letterArray[i] == 'd' && (letterArray[i-1] == 'e' || letterArray[i-1] == '\u00e4')) {
+      // an 'e' or an 'i'
+      if(letterArray[i] == 'd' && (letterArray[i-1] == 'e' || letterArray[i-1] == 'i')) {
         doubleLetter = 'd';
         index = i;
         if(prob < 0.5f * max_random) {

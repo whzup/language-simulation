@@ -5,7 +5,7 @@ Vocabulary dialect;
 
 // All vowels that can be used for words in mutation order
 static final StringList vowels = new StringList(
-  "a", "ä", "e", "i", "j", "o", "ö", "u", "ü", "y"
+  "a", "e", "i", "j", "o", "u", "y"
 );
 
 // All consonants that can be used for words in mutation order
@@ -18,9 +18,7 @@ static final StringList consonants = new StringList(
 static final StringList diphs = new StringList(
   "aa", "ai", "aj", "ao", "au", "ay", "ea", "ee", "ei", "ej", "eo", "ey",
   "ie", "ii", "ij", "iy", "ja", "jä", "je", "ji", "jo", "ju", "jy", "oa",
-  "oi", "oj", "oo", "ou", "oy", "ua", "ue", "ui", "uj", "uo", "uu", "uy",
-  "äi", "äj", "äy", "öi", "öj", "öy", "üi", "üj","üy"
-);
+  "oi", "oj", "oo", "ou", "oy", "ua", "ue", "ui", "uj", "uo", "uu", "uy");
 
 // Consonant shifts loosely based on Grimm's law
 static final StringList shift1 = new StringList(
