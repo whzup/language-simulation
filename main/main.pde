@@ -41,6 +41,27 @@ static final StringList shift5 = new StringList(
   "th", "pf", "wt", "hkp"
 );
 
+// Consonant shifts loosely based on Grimm's law
+static final StringList shift11 = new StringList(
+  "bh", "b", "p", "pf"
+);
+
+static final StringList shift21 = new StringList(
+  "dh", "d", "t", "th"
+);
+
+static final StringList shift31 = new StringList(
+  "gh", "g", "k", "x"
+);
+
+static final StringList shift41 = new StringList(
+  "gwh", "gw", "kw", "xw"
+);
+
+static final StringList shift51 = new StringList(
+  "th", "pf", "w", "h"
+);
+
 void setup() {
   size(1000, 1000);
   langMap = new Map();
