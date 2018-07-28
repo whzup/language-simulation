@@ -22,15 +22,15 @@ static final StringList diphs = new StringList(
 
 // Consonant shifts loosely based on Grimm's law
 static final StringList shift1 = new StringList(
-  "bh", "b", "p", "pf"
+  "h", "b", "p", "f"
 );
 
 static final StringList shift2 = new StringList(
-  "dh", "d", "t", "th"
+  "w", "d", "t", "h"
 );
 
 static final StringList shift3 = new StringList(
-  "gh", "g", "k", "x"
+  "h", "g", "k", "x"
 );
 
 static final StringList shift4 = new StringList(
@@ -38,7 +38,7 @@ static final StringList shift4 = new StringList(
 );
 
 static final StringList shift5 = new StringList(
-  "th", "pf", "w", "h"
+  "th", "pf", "wt", "hkp"
 );
 
 void setup() {
