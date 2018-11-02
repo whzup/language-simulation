@@ -1,7 +1,11 @@
+import controlP5.*;
+
 Map langMap;
 Population population;
 Vocabulary lingua;
 Vocabulary dialect;
+ControlP5 cp5;
+Textarea textArea;
 
 // All vowels that can be used for words in mutation order
 static final StringList vowels = new StringList(
@@ -63,17 +67,27 @@ static final StringList shift51 = new StringList(
 );
 
 void setup() {
-  size(1000, 1000);
+  size(1600, 1000);
+  cp5 = new ControlP5(this);
   langMap = new Map();
   population = new Population(15);
   lingua = new Vocabulary('l');
   dialect = new Vocabulary('i');
+  textArea = cp5.addTextarea("txt")
+  .setColorBackground(color(230,234,245))
+  .setColor(color(22,24,33))
+  .setFont(createFont("arial",30))
+  .setPosition(height, 0)
+  .setSize(width-height, height)
+  .scroll(1)
+  .hideScrollbar(); //<>//
+
 
   // print the words in the lingua franca vocabulary
-  for(int i = 0; i < lingua.wordCount; i++) {
-    Word w = lingua.vocabulary.get(i);
-    print(w.letters,"\n");
-  }
+  //for(int i = 0; i < lingua.wordCount; i++) {
+  //  Word w = lingua.vocabulary.get(i);
+  //  print(w.letters,"\n");
+  //}
 }
 
 void draw() {

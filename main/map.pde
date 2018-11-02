@@ -54,7 +54,7 @@ class Map {
     */
   public Map() {
     this.mapWidth = 40;
-    this.gridX = width/mapWidth;
+    this.gridX = height/mapWidth;
     this.gridY = height/mapWidth;
   }
 

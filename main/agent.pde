@@ -244,7 +244,8 @@ class Agent {
             // Exchange the words
             comm.lingua.vocabulary.add(exchangeWord1);
             lingua.vocabulary.add(exchangeWord2);
-            print("\"" + exchangeWord1.letters + "\" was exchanged for \"" + exchangeWord2.letters + "\"\n");
+            String newString = textArea.getText() + "\"" + exchangeWord1.letters + "\" was exchanged for \"" + exchangeWord2.letters + "\"\n";
+            textArea.setText(newString);
           }
         }
       }
